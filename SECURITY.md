@@ -1,0 +1,7 @@
+# Security
+
+この公開リポジトリには、実際のAWS credential、個人情報、production dataを含めないでください。
+
+脆弱性やsecretの混入を発見した場合は、公開Issueへ値や再現用credentialを書かず、GitHubのSecurity機能から非公開で報告してください。credentialが漏えいした可能性がある場合は、履歴からの削除より先に発行元で無効化・再発行してください。
+
+hands-onは各SectionのREADMEに記載された対象、権限、料金、cleanupの範囲でのみ実行してください。

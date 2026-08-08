@@ -1,0 +1,41 @@
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials
+credentials.*
+.aws/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Build, generated, and large local artifacts
+dist/
+build/
+coverage/
+output/
+artifacts/
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.mp3
+*.mp4
+*.mov
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
