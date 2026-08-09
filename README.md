@@ -9,7 +9,7 @@ git clone https://github.com/toma1110/aws-aip-c01-hands-on.git
 cd aws-aip-c01-hands-on
 ```
 
-講義で指定されたSectionのREADMEを開き、記載された準備、実行、期待結果、トラブルシューティング、料金上の注意、cleanupの順に進めてください。講義でcommit SHAが指定されている場合は、そのcommitをcheckoutして使用してください。
+講義で指定されたSectionのREADMEを開き、記載された準備、実行、期待結果、トラブルシューティング、料金上の注意、cleanupの順に進めてください。
 
 ## Section構成
 
