@@ -1,0 +1,6 @@
+[
+  {"id":"q1","text":"AUTH-401の調査順序は？","relevant_ids":["runbook-auth"],"required_terms":["token issuer","clock skew","key rotation"],"unsupported_claims":[]},
+  {"id":"q2","text":"NET-503で最初に確認する項目は？","relevant_ids":["runbook-network"],"required_terms":["DNS","target health","timeout"],"unsupported_claims":[]},
+  {"id":"q3","text":"key rotation後の認証障害を何から調べる？","relevant_ids":["runbook-auth"],"required_terms":["token issuer","clock skew","key rotation"],"unsupported_claims":[]},
+  {"id":"q4","text":"target healthを含む接続障害の切り分けは？","relevant_ids":["runbook-network"],"required_terms":["DNS","target health","timeout"],"unsupported_claims":["重要","原因を特定"]}
+]

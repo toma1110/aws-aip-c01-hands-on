@@ -1,0 +1,6 @@
+[
+  {"id":"runbook-auth","document_type":"runbook","title":"認証障害 runbook","text":"AUTH-401 が増えた場合は、token issuer、clock skew、key rotation の順に確認する。"},
+  {"id":"faq-auth","document_type":"faq","title":"認証 FAQ","text":"AUTH-401 は認証に失敗したときに表示される一般的な error である。"},
+  {"id":"runbook-network","document_type":"runbook","title":"接続障害 runbook","text":"NET-503 が増えた場合は、DNS、target health、timeout の順に確認する。"},
+  {"id":"faq-network","document_type":"faq","title":"接続 FAQ","text":"NET-503 は一時的に service を利用できない場合に表示される。"}
+]
