@@ -1,0 +1,38 @@
+{
+  "verified_at": "2026-08-13",
+  "fixture": "synthetic-only",
+  "execution": {
+    "root_tests": {"framework": "unittest", "passed": 15, "failed": 0},
+    "public_tests": {"framework": "unittest", "passed": 15, "failed": 0},
+    "scenarios": {
+      "baseline": "PASS",
+      "average-pass-critical-fail": "ROLLBACK",
+      "warning-only": "PASS_WITH_WARNINGS",
+      "manual-review": "HOLD",
+      "fixed": "PASS",
+      "cleanup": {"remaining": []}
+    }
+  },
+  "aws": {
+    "execution_required": false,
+    "reason": "The learning outcome is deterministic CI gate behavior, fully proven with a versioned local fixture; managed evaluation would add nondeterminism and resources without proving an additional acceptance criterion.",
+    "resources_created": [],
+    "region": "not-applicable",
+    "quota_consumed": 0,
+    "estimated_and_actual_cost_usd": 0,
+    "cleanup": {"remaining": []},
+    "current_api_evidence": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-automatic.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-type-automatic.html"
+    ],
+    "region_evidence": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-support.html",
+    "quota_evidence": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html",
+    "pricing_evidence": "https://aws.amazon.com/bedrock/pricing/",
+    "verified_claims": [
+      "Amazon Bedrock supports automatic model evaluation jobs.",
+      "Managed evaluation requires model/Region support and an IAM service role; custom data uses Amazon S3.",
+      "Runtime inference quotas are per model and Region; this exercise invokes no model and consumes none.",
+      "Pricing is usage based and varies by selected model/evaluation path; this local exercise incurs no AWS charge."
+    ]
+  }
+}

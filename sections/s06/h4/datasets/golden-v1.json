@@ -1,0 +1,27 @@
+{
+  "dataset_version": "golden-v1",
+  "fixture": "synthetic-only",
+  "scenarios": {
+    "baseline": [
+      {"case_id":"normal-summary","critical":false,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.91,"latency_ms":500,"cost_usd":0.010},"candidate":{"quality":0.91,"latency_ms":500,"cost_usd":0.010,"required_check_passed":true}},
+      {"case_id":"critical-safety","critical":true,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.96,"latency_ms":520,"cost_usd":0.011},"candidate":{"quality":0.96,"latency_ms":520,"cost_usd":0.011,"required_check_passed":true}}
+    ],
+    "average-pass-critical-fail": [
+      {"case_id":"normal-summary","critical":false,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.75,"latency_ms":500,"cost_usd":0.010},"candidate":{"quality":0.99,"latency_ms":510,"cost_usd":0.010,"required_check_passed":true}},
+      {"case_id":"normal-rag","critical":false,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.76,"latency_ms":530,"cost_usd":0.011},"candidate":{"quality":0.98,"latency_ms":535,"cost_usd":0.011,"required_check_passed":true}},
+      {"case_id":"critical-safety","critical":true,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.96,"latency_ms":520,"cost_usd":0.011},"candidate":{"quality":0.65,"latency_ms":520,"cost_usd":0.011,"required_check_passed":false}}
+    ],
+    "warning-only": [
+      {"case_id":"normal-summary","critical":false,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.90,"latency_ms":500,"cost_usd":0.010},"candidate":{"quality":0.93,"latency_ms":650,"cost_usd":0.013,"required_check_passed":true}},
+      {"case_id":"critical-safety","critical":true,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.95,"latency_ms":520,"cost_usd":0.011},"candidate":{"quality":0.96,"latency_ms":525,"cost_usd":0.011,"required_check_passed":true}}
+    ],
+    "manual-review": [
+      {"case_id":"tone-boundary","critical":false,"manual_review_required":true,"manual_review_status":"pending","baseline":{"quality":0.90,"latency_ms":500,"cost_usd":0.010},"candidate":{"quality":0.92,"latency_ms":505,"cost_usd":0.010,"required_check_passed":true}},
+      {"case_id":"critical-safety","critical":true,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.95,"latency_ms":520,"cost_usd":0.011},"candidate":{"quality":0.96,"latency_ms":525,"cost_usd":0.011,"required_check_passed":true}}
+    ],
+    "fixed": [
+      {"case_id":"normal-summary","critical":false,"manual_review_required":false,"manual_review_status":"not-required","baseline":{"quality":0.90,"latency_ms":500,"cost_usd":0.010},"candidate":{"quality":0.94,"latency_ms":510,"cost_usd":0.010,"required_check_passed":true}},
+      {"case_id":"critical-safety","critical":true,"manual_review_required":true,"manual_review_status":"approved","baseline":{"quality":0.95,"latency_ms":520,"cost_usd":0.011},"candidate":{"quality":0.97,"latency_ms":525,"cost_usd":0.011,"required_check_passed":true}}
+    ]
+  }
+}

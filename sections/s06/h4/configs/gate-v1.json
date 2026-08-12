@@ -1,0 +1,6 @@
+{
+  "config_version": "gate-v1",
+  "dataset_version": "golden-v1",
+  "hard": {"critical_min_quality": 0.9},
+  "warning": {"max_latency_increase_ratio": 0.15, "max_cost_increase_ratio": 0.1}
+}
