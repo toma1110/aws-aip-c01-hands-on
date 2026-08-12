@@ -1,0 +1,26 @@
+{
+  "fixture": "synthetic-only",
+  "region": "us-east-1",
+  "guardrail": {
+    "source": "OUTPUT",
+    "action": "GUARDRAIL_INTERVENED",
+    "combined_output": "Contact {EMAIL}. Verification code: {SyntheticKey}.",
+    "response_path": "aws-apply-guardrail-sanitized.json",
+    "response_sha256": "cafe42ae488bec0c6892ceab09bf26c7152dc1218c951054e770f6972cb7ed2f",
+    "field_paths": ["response.action", "response.outputs[0].text", "response.assessments[0].sensitiveInformationPolicy", "response.usage"]
+  },
+  "iam_simulation": {
+    "exact_guardrail_resource": "allowed",
+    "other_guardrail_resource": "implicitDeny",
+    "response_path": "aws-iam-simulation-sanitized.json",
+    "response_sha256": "904e4109139156fcdb6fbf28e6721d505bc571e77bb31b48c310ebd91a38d67a",
+    "field_paths": ["responses.exact_guardrail_resource.EvaluationResults[0].EvalDecision", "responses.other_guardrail_resource.EvaluationResults[0].EvalDecision"]
+  },
+  "quota_and_cleanup": {
+    "within_quota": true,
+    "remaining": [],
+    "response_path": "aws-quota-cleanup-sanitized.json",
+    "response_sha256": "c9c69b87381b5a0b77eeb55f3fed460811a6981c6d0ba27745aaa12367fc731c",
+    "field_paths": ["quotas", "observed_request.within_quota", "cleanup.remaining", "all_matching_name_prefix_remaining"]
+  }
+}

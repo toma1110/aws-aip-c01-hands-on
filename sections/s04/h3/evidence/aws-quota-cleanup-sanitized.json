@@ -1,0 +1,13 @@
+{
+  "quota_checked_at": "2026-08-12T08:00:37.004078+00:00",
+  "residual_checked_at": "2026-08-12T08:05:28.317751+00:00",
+  "region": "us-east-1",
+  "quotas": [
+    {"quotaCode": "L-9072D6F0", "quotaName": "(Guardrails) On-demand ApplyGuardrail requests per second", "value": 100.0, "unit": "None"},
+    {"quotaCode": "L-CFCAAB0E", "quotaName": "(Guardrails) On-demand ApplyGuardrail Sensitive information filter policy text units per second", "value": 1000.0, "unit": "None"},
+    {"quotaCode": "L-437802FD", "quotaName": "(Guardrails) Sensitive information policy maximum input size in text units", "value": 1000.0, "unit": "None"}
+  ],
+  "observed_request": {"requests": 1, "sensitiveInformationPolicyUnits": 1, "within_quota": true},
+  "cleanup": {"checked_exact_name": "aip-c01-h3-evidence-20260812", "remaining": []},
+  "all_matching_name_prefix_remaining": []
+}

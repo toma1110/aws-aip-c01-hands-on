@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-08-12T08:01:35.969700+00:00",
+  "response": {
+    "usage": {
+      "topicPolicyUnits": 0,
+      "contentPolicyUnits": 0,
+      "wordPolicyUnits": 0,
+      "sensitiveInformationPolicyUnits": 1,
+      "sensitiveInformationPolicyFreeUnits": 1,
+      "contextualGroundingPolicyUnits": 0,
+      "contentPolicyImageUnits": 0,
+      "automatedReasoningPolicyUnits": 0,
+      "automatedReasoningPolicies": 0
+    },
+    "action": "GUARDRAIL_INTERVENED",
+    "actionReason": "Guardrail masked.",
+    "outputs": [
+      {"text": "Contact {EMAIL}. Verification code: {SyntheticKey}."}
+    ],
+    "assessments": [
+      {
+        "sensitiveInformationPolicy": {
+          "piiEntities": [
+            {"match": "john@example.com", "type": "EMAIL", "action": "ANONYMIZED", "detected": true}
+          ],
+          "regexes": [
+            {"name": "SyntheticKey", "match": "SYNTH-KEY-4821", "regex": "SYNTH-KEY-[0-9]{4}", "action": "ANONYMIZED", "detected": true}
+          ]
+        },
+        "invocationMetrics": {
+          "guardrailProcessingLatency": 69,
+          "usage": {
+            "topicPolicyUnits": 0,
+            "contentPolicyUnits": 0,
+            "wordPolicyUnits": 0,
+            "sensitiveInformationPolicyUnits": 1,
+            "sensitiveInformationPolicyFreeUnits": 1,
+            "contextualGroundingPolicyUnits": 0,
+            "contentPolicyImageUnits": 0,
+            "automatedReasoningPolicyUnits": 0,
+            "automatedReasoningPolicies": 0
+          },
+          "guardrailCoverage": {"textCharacters": {"guarded": 60, "total": 60}}
+        },
+        "appliedGuardrailDetails": {
+          "guardrailId": "<GUARDRAIL_ID>",
+          "guardrailVersion": "1",
+          "guardrailArn": "arn:aws:bedrock:us-east-1:<ACCOUNT_ID>:guardrail/<GUARDRAIL_ID>",
+          "guardrailOrigin": ["REQUEST"],
+          "guardrailOwnership": "SELF"
+        }
+      }
+    ],
+    "guardrailCoverage": {"textCharacters": {"guarded": 60, "total": 60}}
+  }
+}

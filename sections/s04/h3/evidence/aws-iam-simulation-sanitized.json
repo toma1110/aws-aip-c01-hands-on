@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-08-12T08:01:47.953048+00:00",
+  "responses": {
+    "exact_guardrail_resource": {
+      "EvaluationResults": [{"EvalActionName": "bedrock:ApplyGuardrail", "EvalResourceName": "arn:aws:bedrock:us-east-1:<ACCOUNT_ID>:guardrail/<GUARDRAIL_ID>", "EvalDecision": "allowed", "MatchedStatements": [{"SourcePolicyId": "PolicyInputList.1", "SourcePolicyType": "IAM Policy", "StartPosition": {"Line": 1, "Column": 41}, "EndPosition": {"Line": 1, "Column": 225}}], "MissingContextValues": [], "EvalDecisionDetails": {}, "ResourceSpecificResults": [{"EvalResourceName": "arn:aws:bedrock:us-east-1:<ACCOUNT_ID>:guardrail/<GUARDRAIL_ID>", "EvalResourceDecision": "allowed", "MatchedStatements": [{"SourcePolicyId": "PolicyInputList.1", "SourcePolicyType": "IAM Policy", "StartPosition": {"Line": 1, "Column": 41}, "EndPosition": {"Line": 1, "Column": 225}}]}]}],
+      "IsTruncated": false
+    },
+    "other_guardrail_resource": {
+      "EvaluationResults": [{"EvalActionName": "bedrock:ApplyGuardrail", "EvalResourceName": "arn:aws:bedrock:us-east-1:<ACCOUNT_ID>:guardrail/other-guardrail", "EvalDecision": "implicitDeny", "MatchedStatements": [], "MissingContextValues": [], "EvalDecisionDetails": {}, "ResourceSpecificResults": [{"EvalResourceName": "arn:aws:bedrock:us-east-1:<ACCOUNT_ID>:guardrail/other-guardrail", "EvalResourceDecision": "implicitDeny"}]}],
+      "IsTruncated": false
+    }
+  }
+}
