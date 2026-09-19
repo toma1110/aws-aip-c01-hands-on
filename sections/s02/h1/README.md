@@ -34,11 +34,11 @@ AWS Price List APIで2026-08-12に確認した価格です。Price Listのeffect
 
 ## 実行するfile
 
-- `sample/documents.json`: 4つの合成runbook/FAQ
-- `sample/queries.json`: 4問、正解document ID、回答に必要な語
-- `scripts/run_h1_cloudshell.sh`: 作成、ingestion、検索、生成、評価、cleanupを行うscript
-- `scripts/evaluate.py`: 保存済み証跡からmetricを再計算するscript
-- `scripts/check_evidence.py`: 証跡の対応関係、cleanup、機密情報混入を検査するscript
+この公開directoryで実行に使うfileは次の3つです。
+
+- [`sample/documents.json`](sample/documents.json): 4つの合成runbook/FAQ
+- [`sample/queries.json`](sample/queries.json): 4問、正解document ID、回答に必要な語
+- [`scripts/run_h1_cloudshell.sh`](scripts/run_h1_cloudshell.sh): 作成、ingestion、検索、生成、評価、cleanupを行うscript
 
 
 ## CloudShellで実行する
@@ -116,7 +116,7 @@ CloudShellの`~/aip-c01-h1-<run-id>/results/`に次が保存されます。
 - `cleanup.json`: resourceの最終状態
 - `final-evidence.json`: 上記をまとめた実行結果
 
-CloudShellの`アクション`→`ファイルのダウンロード`から必要なfileを取得できます。CloudShell内の`final-evidence.json`は再検査用のraw結果で、run固有のresource prefixを含みます。またmanual faithfulnessは`null`、rationaleは`MANUAL_REVIEW_REQUIRED`です。共有用へ転記するときは、account ID、resource名、絶対path、credentialを除外し、回答・citation・token・latency・cleanup結果は変更しないでください。その後、下記のmanual reviewを行って値とrationaleを確定します。
+CloudShellの`アクション`→`ファイルのダウンロード`から必要なfileを取得できます。CloudShell内の`final-evidence.json`は再検査用のraw結果で、run固有のresource prefixを含みます。またmanual faithfulnessは`null`、rationaleは`MANUAL_REVIEW_REQUIRED`です。raw結果は変更せず、下記のmanual review結果を別のメモへ記録してください。結果を共有する場合は、account ID、resource名、絶対path、credentialを含めず、回答・citation・token・latency・cleanup結果も書き換えないでください。
 
 ## metricと採否
 
@@ -149,8 +149,9 @@ filterを採用する条件は次の両方です。
 2. 各主張を`citation_ids`が指す`retrieved.text`と照合する
 3. 全主張が明示的に支持されれば`faithfulness: true`、一つでも根拠外なら`false`にする
 4. 根拠外または支持された範囲を`faithfulness_rationale`へ一文で記録する
-5. 新しく繰り返し検出したい表現だけを`unsupported_claims`へ追加し、proxyを補助検査として更新する
-6. `evaluate.py`でmanual確定値からsummaryを再計算し、`check_evidence.py`でraw/proxy/manualの対応を検査する
+5. `baseline`と`improved`を分け、`faithfulness: true`の件数をそれぞれ4で割ってfaithfulnessを計算する
+6. `phase`、`query_id`、faithfulness、rationaleを別のメモへ記録し、raw結果と対応付ける
+7. 新しく繰り返し検出したい表現があれば、次回実行前に`sample/queries.json`の`unsupported_claims`へ追加し、proxyを補助検査として使う
 
 未知の根拠外主張はproxyがtrueでもmanual faithfulnessをfalseにできます。proxyとmanual値の相違はエラーではなく、proxyの限界を示す記録です。
 
