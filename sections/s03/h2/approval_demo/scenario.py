@@ -13,8 +13,8 @@ from strands import Agent
 from strands.tools.mcp import MCPClient
 from strands.vended_interventions.hitl import HumanInTheLoop
 
-from h2.local_model import LocalToolModel
-from h2.mock_store import cleanup, read_ticket, reset
+from approval_demo.local_model import LocalToolModel
+from approval_demo.mock_store import cleanup, read_ticket, reset
 
 
 def _client() -> MCPClient:

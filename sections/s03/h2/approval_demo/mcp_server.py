@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from h2.mock_store import read_ticket, safe_update, unsafe_update
+from approval_demo.mock_store import read_ticket, safe_update, unsafe_update
 
 mcp = FastMCP("h2-local-ticket-tools", json_response=True)
 

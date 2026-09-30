@@ -1,19 +1,18 @@
-# Strands AgentsとMCPに人による承認を追加する
+# Strands AgentsとMCPで書き込み前の承認を確認する
 
 ## このハンズオンで解決する課題
 
-エージェントへ自然な言葉で依頼しただけで、外部へ影響するツールが実行される構成には危険があります。このハンズオンでは、合成チケットを更新するローカルツールを使い、次の違いを実際の処理結果で確かめます。
+架空のサポートチケットを使い、書き込みを判断が済むまで保留する仕組みを確かめます。読み取りはそのまま実行し、書き込みは許可された場合だけ進めます。この例では、`LocalToolModel`が生成AIモデルの代わりに決められたツールと引数を返すので、実際の人やAIモデルは判断しません。
 
 - 読み取りは余計な承認なしで実行する
-- 書き込みは実行直前で止め、人が承認または拒否する
-- 不正な入力、拒否、時間切れでは何も変更しない
-- 同じ依頼を再試行しても書き込みを重複させない
+- 書き込みは実行直前で止まり、承認された場合だけ進む
+- 拒否または時間切れではチケットを変更しない
 
-Strands Agentsはモデル、指示、ツール、会話状態を組み合わせるソフトウェア開発キットです。Model Context Protocol（MCP）は、AIアプリケーションと外部ツールを共通の方法で接続します。この演習では、Strands AgentsのMCPクライアントと、標準入出力で動く最小MCPサーバーを実際に接続します。
+Strands Agentsは、モデルやツールを組み合わせてエージェントを作るSDKです。MCPはエージェントとツールをつなぐ共通の方式です。この例では、Strands AgentsのMCPクライアントが、PC上で動く小さなMCPサーバーからチケットの読み取り・更新ツールを利用します。
 
-演習対象は合成チケットです。MCPの標準入出力接続と、Strands AgentsのHumanInTheLoopによる中断・再開は実際のSDKで動かします。一方、ツールを選ぶ部分には結果が毎回同じになる`LocalToolModel`を使います。これは大規模言語モデルではなく、指定されたツールと引数を返す演習用モデルです。このハンズオンは、自然言語の理解や大規模言語モデルによるツール選択の品質を評価するものではありません。
+この演習は生成AIモデルを呼び出しません。`LocalToolModel`はStrands SDKのモデル用インターフェースに合わせた演習用実装で、指定済みのツール名と引数を返すだけです。文章を理解したり推論したりしないため、ここで試すのはモデルの判断力ではなく、Strands AgentsのHumanInTheLoopによる中断・再開と、設定済みの応答後に書き込みが進む流れです。
 
-`baseline`、`read`、`approve`、`deny`、`timeout`は、結果を比較しやすくする固定済みの非対話シナリオです。各コマンドは同じ初期チケット（`status: open`、`version: 1`）へリセットしてから始まります。そのため、前のコマンドの結果を次のコマンドへ引き継がず、一つずつ独立した比較として実行できます。
+`baseline`、`read`、`approve`、`deny`、`timeout`は、受講者が承認画面で選ぶ対話操作ではありません。シナリオごとにチケットを`status: open`、`version: 1`へ戻し、プログラムが承認・拒否の応答を渡します。`timeout`は実時間を待たず、応答を返さずに処理を再開しないことで表します。データファイルは実行したディレクトリ内の`.h2-state`に作られます。各結果は独立しているため、順番に実行して比較できます。
 
 ## 安全境界と料金
 
@@ -57,52 +56,43 @@ python -m pip install -r requirements.txt
 export PYTHONPATH="$PWD"
 ```
 
-## 1. 制御の弱いbaselineを観察する
+## 1. 承認なしの書き込みを基準として見る
+
+まず、承認制御のない書き込みがどうなるかを確認します。`agent.stop_reason: end_turn`と`agent.interrupt_count: 0`なら、処理が中断されずに終わっています。`ticket.status: closed-ish`、`ticket.version: 2`なら、曖昧な状態値が保存されたことを示します。この結果を次のシナリオと比べます。
 
 ```bash
-python -m h2.scenario baseline --state-dir .h2-state
+python -m approval_demo.scenario baseline --state-dir .h2-state
 ```
 
-期待結果は、曖昧な`closed-ish`という値でも書き込まれ、チケットの`version`が2になることです。これは問題を再現するためだけの弱いツールです。実システムへ転用しないでください。
+## 2. 読み取りと承認後の書き込みを比べる
 
-合否に使うJSON項目は`agent.stop_reason`が`end_turn`、`agent.interrupt_count`が`0`、`ticket.status`が`closed-ish`、`ticket.version`が`2`です。
-
-## 2. 人による承認を追加する
-
-まず読み取りが承認なしで完了することを確認します。
+一般にHumanInTheLoopは、書き込みなどの処理を人の判断まで止める仕組みです。このデモでは画面上で人が選ぶのではなく、シナリオが事前に設定した応答をStrands Agentsへ渡します。ここではチケットを読む操作から始めます。`agent.interrupt_count: 0`は承認による中断がなかったこと、`ticket.status: open`と`ticket.version: 1`は読み取りで状態が変わっていないことを示します。
 
 ```bash
-python -m h2.scenario read --state-dir .h2-state
+python -m approval_demo.scenario read --state-dir .h2-state
 ```
 
-`interrupt_count: 0`、`status: open`、`version: 1`なら成功です。
-
-次に書き込みを実行します。
+次に書き込みを試します。`approve`シナリオでは、プログラムが承認応答`yes`を渡します。JSONの`before_decision.stop_reason: interrupt`と`before_decision.interrupt_count: 1`で、書き込み前に一度中断したことを確認します。その後の`ticket.status: investigating`と`ticket.version: 2`は、設定済みの承認応答を受けて一度だけ更新されたことを示します。
 
 ```bash
-python -m h2.scenario approve --state-dir .h2-state
+python -m approval_demo.scenario approve --state-dir .h2-state
 ```
 
-期待結果:
-
-- 最初の処理は`stop_reason: interrupt`で停止する
-- 承認後だけ`status: investigating`、`version: 2`になる
-- ツール入力は状態の許可リスト、理由、現在のversion、request IDで検証される
-
-合否に使うJSON項目は`before_decision.stop_reason`、`before_decision.interrupt_count`、`ticket.status`、`ticket.version`です。承認後は順に`interrupt`、`1`、`investigating`、`2`になります。
-
-承認は入力検証の代わりではありません。この例では、検証を通った書き込みだけを承認対象にし、更新直前のversionも照合します。
+この例では、状態値が許可リストにあること、理由が必要な長さであること、チケットのversionが現在値と一致すること、request IDが所定の形式であることを確認します。承認は入力検証の代わりにはなりません。
 
 ## 3. 拒否と時間切れを確認する
 
+`deny`シナリオでは、プログラムが拒否応答`no`を渡します。`before_decision.stop_reason: interrupt`で判断待ちに入ったことを確認し、`ticket.status: open`と`ticket.version: 1`が保たれていれば、設定済みの拒否応答後に書き込みが起きていません。
+
 ```bash
-python -m h2.scenario deny --state-dir .h2-state
-python -m h2.scenario timeout --state-dir .h2-state
+python -m approval_demo.scenario deny --state-dir .h2-state
 ```
 
-どちらも`status: open`、`version: 1`のままなら成功です。時間切れの例は、承認応答を返さずに処理を終了することで再現します。実サービスでは、承認待ち状態の保存期間と期限切れ処理を別途設計してください。
+時間切れシナリオは承認応答を返さず、処理を再開しません。実時間は待ちません。`decision: timeout-no-resume`と`ticket.status: open`、`ticket.version: 1`を見れば、時間切れとして扱い、初期状態から変わらなかったことを確認できます。
 
-拒否では`before_decision.stop_reason: interrupt`、`ticket.status: open`、`ticket.version: 1`を確認します。時間切れでは同じ3項目に加えて`decision: timeout-no-resume`を確認します。
+```bash
+python -m approval_demo.scenario timeout --state-dir .h2-state
+```
 
 ## 4. 自動テストを実行する
 
@@ -122,8 +112,8 @@ python -m pytest -q
 ## 想定と異なる場合
 
 1. `ModuleNotFoundError`なら、仮想環境が有効で、`PYTHONPATH`がこのディレクトリを指すことを確認します。
-2. MCPサーバーが開始しない場合は、`python -m h2.mcp_server`を実行し、Pythonと`mcp`のversionを確認します。標準入出力サーバーは待機するため、確認後は`Ctrl+C`で終了します。
-3. `H2_STATE_DIR is required`なら、`h2.scenario`経由で実行しているか確認します。
+2. MCPサーバーが開始しない場合は、Pythonと`mcp`のversionを確認します。標準入出力サーバーはシナリオから起動します。
+3. `H2_STATE_DIR is required`なら、`approval_demo.scenario`経由で実行しているか確認します。
 4. 承認後も更新されない場合は、`ticket_id`、`status`、`reason`、`expected_version`、`request_id`の検証条件を確認します。
 5. 処理が残っている場合は、実行中のPythonを終了してからcleanupします。ネットワークサービスやAWSリソースは作成していません。
 
@@ -132,10 +122,10 @@ python -m pytest -q
 ## Cleanupと残存確認
 
 ```bash
-python -m h2.scenario cleanup --state-dir .h2-state
+python -m approval_demo.scenario cleanup --state-dir .h2-state
 ```
 
-`remaining: []`なら演習データは残っていません。必要なら仮想環境も削除します。
+`remaining: []`ならチケットと監査記録のファイルは残っていません。空になった`.h2-state`ディレクトリ自体は残ります。下の削除コマンドで仮想環境と一緒にディレクトリも削除できます。
 
 PowerShell:
 

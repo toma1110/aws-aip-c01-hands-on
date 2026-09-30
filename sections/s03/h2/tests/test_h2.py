@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from h2.mock_store import ValidationError, cleanup, read_ticket, reset, safe_update
-from h2.scenario import run_baseline, run_improved, run_read_only
+from approval_demo.mock_store import ValidationError, cleanup, read_ticket, reset, safe_update
+from approval_demo.scenario import run_baseline, run_improved, run_read_only
 
 
 @pytest.fixture(autouse=True)
