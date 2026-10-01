@@ -68,10 +68,10 @@ sed -e "s/111122223333/$ACCOUNT_ID/g" -e "s/HANDSON_GUARDRAIL_ID/$GUARDRAIL_ID/g
   policy/least-privilege.json >"$WORK_DIR/policy.json"
 GUARDRAIL_ARN="arn:aws:bedrock:${REGION}:${ACCOUNT_ID}:guardrail/${GUARDRAIL_ID}"
 OTHER_ARN="arn:aws:bedrock:${REGION}:${ACCOUNT_ID}:guardrail/other-guardrail"
-aws iam simulate-custom-policy --policy-input-list "file://$WORK_DIR/policy.json" \
+aws iam simulate-custom-policy --policy-input-list "$(cat "$WORK_DIR/policy.json")" \
   --action-names bedrock:ApplyGuardrail --resource-arns "$GUARDRAIL_ARN" \
   --output json --no-cli-pager >"$WORK_DIR/iam-allowed.json"
-aws iam simulate-custom-policy --policy-input-list "file://$WORK_DIR/policy.json" \
+aws iam simulate-custom-policy --policy-input-list "$(cat "$WORK_DIR/policy.json")" \
   --action-names bedrock:ApplyGuardrail --resource-arns "$OTHER_ARN" \
   --output json --no-cli-pager >"$WORK_DIR/iam-denied.json"
 jq -e '.EvaluationResults[0].EvalDecision == "allowed"' "$WORK_DIR/iam-allowed.json" >/dev/null
